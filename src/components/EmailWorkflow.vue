@@ -3,7 +3,7 @@
   <div class="columns">
     <EmailSidebar
     v-bind:fields="fields"></EmailSidebar>
-    <EmailDisplay></EmailDisplay>
+    <EmailDisplay v-bind:fields="fields"></EmailDisplay>
   </div>
 </div>
 </template>

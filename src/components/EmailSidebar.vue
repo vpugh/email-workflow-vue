@@ -16,35 +16,16 @@
             <div class="content">
               <div class="select">
                 <select name="email-template" id="email-template" v-model="currentTemplate">
-                    <!-- <option value="" disabled selected>CCED Webinar</option> -->
-                    <option value="<cced_od></cced_od>" selected>CCED On-Demand</option>
-                    <option value="<cced_od></cced_od>">CCED Register</option>
-                    <option value="<cced_od></cced_od>">CCED Reminder</option>
-                    <!-- <option value="" disabled>ID Webinar</option>
-                    <option value="">ID On-Demand</option>
-                    <option value="">ID Register</option>
-                    <option value="">ID Reminder</option>
-                    <option value="" disabled>IDT Webinar</option>
-                    <option value="">IDT On-Demand</option>
-                    <option value="">IDT Register</option>
-                    <option value="">IDT Reminder</option> -->
-                    <option value="" disabled>CDEWorld Webinar</option>
-                    <option value="<cdew_reg_webinar></cdew_reg_webinar>">CDEW On-Demand</option>
-                    <option value="<cdew_reg_webinar></cdew_reg_webinar>">CDEW Register</option>
-                    <option value="<cdew_reg_webinar></cdew_reg_webinar>">CDEW Reminder</option>
+                    <option value="default" selected disabled>Select a Template</option>
+                    <option v-for="emaillist in emailLists" :key="emaillist.id" :value="emaillist.template">{{emaillist.name}}</option>
                     </select>
               </div>
             </div>
             <div class="content">
               <div class="select">
-                <select name="email-list" id="">
-                  <option value="" selected>Select Email List - Unsubscribe</option>
-                  <option value="%%PLUGIN_UNSUBSCRIBE: CCED-UNSUBSCRIBE%%">CCED Webinar List</option>
-                  <option value="%%PLUGIN_UNSUBSCRIBE: IDT-UNSUBSCRIBE%%">IDT - Newsletter</option>
-                  <option value="%%PLUGIN_UNSUBSCRIBE: IDWeb-UNSUBSCRIBE%%">ID Webinar List</option>
-                  <option value="%%PLUGIN_UNSUBSCRIBE: CDEWeb-UNSUBSCRIBE%%">CDEWorld Webinar List</option>
-                  <option value="%%PLUGIN_UNSUBSCRIBE: Nobel-UNSUBSCRIBE%%">Nobel Webinar List</option>
-                  <option value="%%PLUGIN_UNSUBSCRIBE: CDELab-UNSUBSCRIBE%%">CDEWorld - Lab </option>
+                <select name="email-list" id="" v-model="currentUnsubscribes">
+                  <option value="default" selected>Select Email List - Unsubscribe</option>
+                  <option v-for="subs in unsubHash" :key="subs.id" :value="subs.unsub">{{subs.name}}</option>
                 </select>
               </div>
             </div>
@@ -61,8 +42,6 @@
                 <select name="send-year" id="" v-model="currentYear">
                   <option value="" selected disabled>Send Year</option>
                   <option v-for="year in years" :key="year.id" :value="year.year">Send Year - {{year.year}}</option>
-                  <!-- <option value="2018">Send Year - 2018</option>
-                  <option value="2019">Send Year - 2019</option> -->
                 </select>
               </div>
             </div>
@@ -85,14 +64,10 @@
               <div class="inputs">
                 <div class="field" v-for="(field, index) in fields" :key="field.id">
                   <div class="control" v-if="field.type == 'input'" >
-                    <!-- <p class="inputTest" v-model="field.value">{{field.label}}</p> -->
-                    <input type="text" class="input" :name="field.name" :id="index" :value="field.value" :placeholder="field.label" @change="fieldUpdate($event.target.value,index)">
-                    <!-- <p class="inputTest" v-model="field.value">{{field.value}}</p> -->
+                    <input type="text" class="input" :name="field.name" :id="index" v-model="field.value" :placeholder="field.label" @change="fieldUpdate($event.target.value,index)">
                   </div>
                   <div class="control" v-if="field.type == 'textarea'">
-                    <!-- <p class="inputTest" v-model="field.value">{{field.label}}</p> -->
                      <textarea class="textarea" :name="field.name" id="" :value="field.value" cols="30" rows="5"></textarea>
-                    <!-- <p class="inputTest" v-model="field.value">{{field.value}}</p> -->
                   </div>
                 </div>
               </div>
@@ -114,12 +89,23 @@ import cced_od_parent from '../templates/cced_od_parent.js';
 
 export default {
     name: 'EmailSidebar',
-    props: ['emailTemplate', 'fields'],
+    props: ['fields'],
+    components: {
+        cced_od_webinar,
+        cced_reg_webinar,
+        cced_rem_webinar,
+        cdew_reg_webinar,
+        cdew_rem_webinar,
+        cdew_od_webinar,
+        cced_od_parent
+    },
     data () {
         return {
             currentTemplate: '',
             currentMonth: '',
             currentYear: '',
+            currentTemplate: 'default',
+            currentUnsubscribes: 'default',
             months: [
                 {month:'01', name:'January'}, 
                 {month:'02', name:'Feburary'}, 
@@ -138,6 +124,24 @@ export default {
                 {year: '2017'},
                 {year: '2018'},
                 {year: '2019'}
+            ],
+            emailLists: [
+                {template: '<cced_od_webinar></cced_od_webinar>', name: 'CCED On-Demand'},
+                {template: '<cced_reg_webinar></cced_reg_webinar>', name: 'CCED Registration'},
+                {template: '<cced_rem_webinar></cced_rem_webinar>', name: 'CCED Reminder'},
+                {template: '<cdew_od_webinar></cdew_od_webinar>', name: 'CDEW On-Demand'},
+                {template: '<cdew_reg_webinar></cdew_reg_webinar>', name: 'CDEW On-Registration'},
+                {template: '<cdew_rem_webinar></cdew_rem_webinar>', name: 'CDEW On-Reminder'}
+            ],
+            unsubHash: [
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: CCEDWebinar-UNSUBSCRIBE%%', name: 'CCED - Webinar'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: IDT-UNSUBSCRIBE%%', name: 'IDT - Newsletter'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: ID-UNSUBSCRIBE%%', name: 'ID - Newsletter'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: CDEWWebinar-UNSUBSCRIBE%%', name: 'CDEW - Webinar'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: ID-UNSUBSCRIBE%%', name: 'CDEW - DDS'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: ID-UNSUBSCRIBE%%', name: 'CDEW - DA'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: ID-UNSUBSCRIBE%%', name: 'CDEW - LAB'},
+                {unsub: '%%PLUGIN_UNSUBSCRIBE: ID-UNSUBSCRIBE%%', name: 'CDEW - HG'}
             ]
         }
     },
@@ -161,9 +165,12 @@ export default {
             return currentYear;
         },
         template() {
-            var currentTemplate = document.getElementById("ddlViewBy").value;
-            console.log(currentTemplate);
+            var currentTemplate = 'default';
             return currentTemplate;
+        },
+        unsubscribes() {
+            var currentUnsubscribes = 'default';
+            return currentUnsubscribes;
         }
         
     }

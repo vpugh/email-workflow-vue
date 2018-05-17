@@ -107,8 +107,8 @@
 </template>-->
 
 <template>
-  <div class="container">
-    <h2>CCED On-Demand Test</h2>
+  <div>
+    <h2 class="is-size-5">CCED On-Demand Test</h2>
     <p>{{header}} {{title}} {{presenter}} {{provider}} {{comsupporter}} {{cost}} {{credits}} {{expiration}} {{description}} {{webinarlink}}</p>
   </div>
 </template>
@@ -127,6 +127,11 @@ export default {
       'credits', 
       'expiration', 
       'description', 
+      'LO-1',
+      'LO-2',
+      'LO-3',
+      'disclosure',
+      'cta',
       'webinarlink'
     ],
     data () {
@@ -153,15 +158,7 @@ export default {
         }
     },
     computed: {
-        createForms(fields) {
-          var emailHeader = fields[0].value;
-          var emailTitle = fields[1].value;
-          var emailPresenter = fields[2].value;
-          return emailHeader;
-          return emailTitle;
-          return emailPresenter;
-          return (`{{emailHeader}} {{emailTitle}} {{emailPresenter}}`)
-        }
+        
     }
 }
 </script>

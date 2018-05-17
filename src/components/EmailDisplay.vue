@@ -15,23 +15,10 @@
           <div class="card-content">
               <!-- {{ currentTemplate }} -->
               <!-- <cced_od_parent/> -->
-              <div class="field" v-for="field in fields" :key="field.id">
-                  <div class="control" v-if="field.type == 'input'" >Test</div>
-            </div>
-              <cced_od_webinar></cced_od_webinar>
-              <!-- <cced-od-email
-                v-bind:header="fields[0].value" 
-                v-bind:title="fields[1].value"
-                v-bind:presenter="fields[2].value"
-                v-bind:provider="fields[3].value"
-                v-bind:comsupporter="fields[4].value"
-                v-bind:cost="fields[5].value"
-                v-bind:credits="fields[6].value"
-                v-bind:expiration="fields[7].value"
-                v-bind:description="fields[8].value"
-                v-bind:webinarlink="fields[16].value">
-              </cced-od-email> -->
-            <!-- <cced-email 
+            <!-- <div class="field" v-for="field in fields" :key="field.id">
+                <div class="control" v-if="field.type == 'input'">{{field.value}}</div>
+            </div> -->
+            <cced_od_webinar
               v-bind:header="fields[0].value" 
               v-bind:title="fields[1].value"
               v-bind:presenter="fields[2].value"
@@ -41,8 +28,13 @@
               v-bind:credits="fields[6].value"
               v-bind:expiration="fields[7].value"
               v-bind:description="fields[8].value"
-              v-bind:webinarlink="fields[16].value">
-            </cced-email> -->
+              v-bind:LO-1="fields[9].value"
+              v-bind:LO-2="fields[10].value"
+              v-bind:LO-3="fields[11].value"
+              v-bind:disclosure="fields[12].value"
+              v-bind:cta="fields[13].value"
+              v-bind:webinarlink="fields[14].value">
+              </cced_od_webinar>
           </div>
         </div>
       </div>
